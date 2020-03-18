@@ -1,17 +1,13 @@
 import functools
 import tensorflow as tf
-from utils import get_mean_std, get_vocabulary
-
-
-def normalize_numeric_data(data, mean, std):
-    # Center the data
-    return (data - mean) / std
+from utils.preprocessing.stats import get_mean_std, get_vocabulary
+from utils.preprocessing.numeric import normalize_data
 
 
 def pipe_joint(file_path, numeric_features, categorical_features):
     mean, std = get_mean_std(file_path, numeric_features)
     categories = get_vocabulary(file_path, categorical_features)
-    normalizer = functools.partial(normalize_numeric_data, mean=mean, std=std)
+    normalizer = functools.partial(normalize_data, mean=mean, std=std)
     numeric_column = tf.feature_column.numeric_column('numeric', normalizer_fn=normalizer,
                                                       shape=[len(numeric_features)])
     numeric_columns = [numeric_column]
@@ -31,17 +27,21 @@ class Model:
         self.train_file_path = self.params.train_path
 
     def build(self):
-        preprocessing_layer = pipe_joint(self.params.train_path, self.NUMERIC_FEATURES, self.CATEGORICAL_FEATURES)
+        model = tf.keras.Sequential()
+        model.add(pipe_joint(self.params.train_path, self.NUMERIC_FEATURES, self.CATEGORICAL_FEATURES))
 
-        model = tf.keras.Sequential([
-            preprocessing_layer,
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dense(1),
-        ])
+        for layer in self.params.dense_layers:
+            units = layer[0]
+            try:
+                activation = layer[1]
+            except IndexError:
+                activation = None
+            model.add(tf.keras.layers.Dense(units=units, activation=activation))
 
+        loss = getattr(tf.keras.losses, self.params.loss)()
         model.compile(
-            loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-            optimizer='adam',
-            metrics=['accuracy'])
+            loss=loss,
+            optimizer=self.params.optimizer,
+            metrics=self.params.metrics)
+
         return model

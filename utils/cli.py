@@ -1,6 +1,6 @@
 import argparse
 import os
-from .params_parser import Params
+from .params import Params
 
 class CliArgs():
     def __init__(self, args):
