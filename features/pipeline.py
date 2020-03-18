@@ -13,10 +13,9 @@ class DataPipe:
         self.CATEGORICAL_FEATURES = self.params.layout["categorical"]
         self.SELECT_COLUMNS = [self.LABEL_COLUMN] + self.NUMERIC_FEATURES + self.CATEGORICAL_FEATURES
         self.train_file_path = self.params.train_path
-        # self.test_file_path = self.params.test_path
+        self.test_file_path = self.params.train_path
         # if not self.test_file_path:
             # self.train_file_path, \
-        self.test_file_path = self.train_file_path
 
     def build(self):
         train_data = self.get_dataset(self.train_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES)).shuffle(self.BUFFER_SIZE)

@@ -3,6 +3,7 @@ from utils.cli import CliArgs
 from features.pipeline import DataPipe
 from models.ffnn import Model
 import tensorflow as tf
+from matplotlib import pyplot
 
 
 def train(args):
@@ -12,12 +13,15 @@ def train(args):
     train_data, test_data = pipe.build()
     model = Model(params)
     model = model.build()
-    model.fit(train_data, epochs=20)
+    history = model.fit(train_data, epochs=40)
     predictions = model.predict(test_data)
 
     # Show some results
-    for prediction, actual in zip(predictions[:10], list(test_data)[0][1][:10]):
-        print("Predicted outcome: ", prediction[0], " | Actual outcome: ", actual.numpy())
+    # for prediction, actual in zip(predictions[:10], list(test_data)[0][1][:10]):
+    #     print("Predicted outcome: ", prediction[0], " | Actual outcome: ", actual.numpy())
+    # plot metrics
+    pyplot.plot(history.history['mse'])
+    pyplot.show()
 
     return
 
