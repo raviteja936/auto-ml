@@ -1,9 +1,10 @@
 import sys
-from utils.cli import CliArgs
-from features.pipeline import DataPipe
-from models.ffnn import Model
 import tensorflow as tf
 from matplotlib import pyplot
+
+from utils.cli import CliArgs
+from pipes.pipeline import DataPipe
+from models.ffnn import Model
 
 
 def train(args):
@@ -12,9 +13,9 @@ def train(args):
     pipe = DataPipe(params, "train")
     train_data, test_data = pipe.build()
     model = Model(params)
-    model = model.build()
-    history = model.fit(train_data, epochs=40)
-    predictions = model.predict(test_data)
+    model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
+    history = model.fit(train_data, epochs=20)
+    # predictions = model.predict(test_data)
 
     # Show some results
     # for prediction, actual in zip(predictions[:10], list(test_data)[0][1][:10]):

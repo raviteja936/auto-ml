@@ -2,7 +2,7 @@ import sys
 from utils import CliArgs
 from build import train
 from predict import score
-from features import DataPipe
+from pipes import DataPipe
 
 
 def experiment(param):
