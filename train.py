@@ -12,14 +12,19 @@ def train(args):
     params = args.get_params()
     pipe = DataPipe(params, "train")
     train_data = pipe.build()
-    print(train_data)
 
-    # model = Model(params)
+    data, label = (next(iter(train_data)))
+    print(data.shape)
+
+
+    model = Model(params)
     # model.build(input_shape = (None, 224, 224, 3))
-    # model.summary()
+    # print(model(data).shape)
 
-    # model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
-    # history = model.fit(train_data, epochs=1)
+    # model.summary()
+    #
+    model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
+    history = model.fit(train_data, epochs=1, steps_per_epoch=10)
     # predictions = model.predict(test_data)
 
     # Show some results

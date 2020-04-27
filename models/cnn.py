@@ -12,6 +12,8 @@ class Model(tf.keras.Model):
             self.model_layers.append(tf.keras.layers.Conv2D(filters, kernel_size, activation='relu'))
             self.model_layers.append(tf.keras.layers.MaxPooling2D((2, 2)))
 
+        self.model_layers.append(tf.keras.layers.Flatten())
+
         for layer in params.dense_layers:
             units = layer[0]
             try:

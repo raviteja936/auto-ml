@@ -27,7 +27,7 @@ class DataPipe:
         #     ds = ds.cache()
         # train_data = self.get_dataset(self.train_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES)).shuffle(self.BUFFER_SIZE)
         # test_data = self.get_dataset(self.test_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES))
-        train_data = self.get_dataset_from_files(self.train_file_path).batch(self.BATCH_SIZE).prefetch(1)
+        train_data = self.get_dataset_from_files(self.train_file_path).repeat().batch(self.BATCH_SIZE).prefetch(1)
         # test_data = self.get_dataset_from_files(self.test_file_path)
 
         return train_data
