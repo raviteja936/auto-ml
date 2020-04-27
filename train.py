@@ -4,25 +4,30 @@ from matplotlib import pyplot
 
 from utils.cli import CliArgs
 from pipes.pipeline import DataPipe
-from models.ffnn import Model
+from models.cnn import Model
 
 
 def train(args):
     args = CliArgs(args)
     params = args.get_params()
     pipe = DataPipe(params, "train")
-    train_data, test_data = pipe.build()
-    model = Model(params)
-    model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
-    history = model.fit(train_data, epochs=20)
+    train_data = pipe.build()
+    print(train_data)
+
+    # model = Model(params)
+    # model.build(input_shape = (None, 224, 224, 3))
+    # model.summary()
+
+    # model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
+    # history = model.fit(train_data, epochs=1)
     # predictions = model.predict(test_data)
 
     # Show some results
     # for prediction, actual in zip(predictions[:10], list(test_data)[0][1][:10]):
     #     print("Predicted outcome: ", prediction[0], " | Actual outcome: ", actual.numpy())
     # plot metrics
-    pyplot.plot(history.history['mse'])
-    pyplot.show()
+    # pyplot.plot(history.history['mse'])
+    # pyplot.show()
 
     return
 
