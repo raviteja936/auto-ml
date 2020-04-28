@@ -1,5 +1,7 @@
 import tensorflow as tf
-from joints.structured import pipe_joint
+
+from models.joints.structured import pipe_joint
+
 
 class Model:
 

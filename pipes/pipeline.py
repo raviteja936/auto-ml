@@ -1,6 +1,6 @@
 import tensorflow as tf
-from .preprocess import PackNumericFeatures
-from preprocess.image.image_utils import process_path
+
+from utils.preprocessing.image.image_utils import process_path
 
 
 class DataPipe:
