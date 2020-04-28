@@ -1,11 +1,9 @@
 
 {
-    "layout": {
-        "target": "label"
-        },
     "train_path": "/home/ravi/.keras/datasets/flower_photos",
     "test_path": "",
     "data_type": "image files",
+    "map_type": "image",
     "buffer_size": 500,
     "batch_size": 32,
     "conv_layers": [[32, 3], [32, 3]],
@@ -16,6 +14,5 @@
     "learning_rate": 1e-3,
     "num_epochs": 1,
     "dropout_rate": 0.3,
-
     "save_summary_steps": 100
 }

@@ -17,11 +17,10 @@ class DataReader:
     def get_dataset_from_csv(self, file_path, **kwargs):
         dataset = tf.data.experimental.make_csv_dataset(
             file_path,
-            batch_size=256,
-            select_columns=self.SELECT_COLUMNS,
-            label_name=self.LABEL_COLUMN,
+            select_columns=[self.params.layout["target"]]+self.params.layout["numeric"]+self.params.layout["categorical"],
+            label_name=self.params.layout["target"],
             na_value="?",
-            num_epochs=1,
+            batch_size=self.params.batch_size,
             ignore_errors=True,
             **kwargs)
         return dataset

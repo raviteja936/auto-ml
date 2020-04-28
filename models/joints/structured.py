@@ -1,7 +1,8 @@
 import functools
 import tensorflow as tf
-from utils.preprocessing.stats import get_mean_std, get_vocabulary
-from utils.preprocessing.numeric import normalize_data
+
+from utils.preprocessing.stats.stats import get_mean_std, get_vocabulary
+from utils.preprocessing.stats.numeric import normalize_data
 
 
 def pipe_joint(file_path, numeric_features, categorical_features):
