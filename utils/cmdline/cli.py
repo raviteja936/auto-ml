@@ -2,7 +2,7 @@ import argparse
 import os
 from .params import Params
 
-class CliArgs():
+class CliParser():
     def __init__(self, args):
         self.parser = argparse.ArgumentParser()
 

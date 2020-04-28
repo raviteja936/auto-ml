@@ -1,55 +1,47 @@
 import tensorflow as tf
 
 from utils.preprocessing.image.image_utils import process_path
+from .reader import DataReader
 
 
 class DataPipe:
-    def __init__(self, params, mode):
+    def __init__(self, params):
         self.params = params
-        if mode == "train":
-            self.is_training = 1
-        self.BUFFER_SIZE = 500
-        self.BATCH_SIZE = 32
         self.CACHE = True
+
+    def build(self):
+        reader = DataReader(self.params)
+
+        train_ds = reader.read(self.params.train_path)
+        train_ds = self.preprocess(train_ds)
+        train_ds = train_ds.shuffle(self.params.buffer_size).batch(self.params.batch_size)
+
+
+
+        if self.params.test_path != "":
+            test_ds = None
+            # test_ds = read(self.test_path)
+        else:
+            test_ds = None
+            # train_ds, test_ds = self.split_dataset(train_ds)
+
+        # if self.CACHE:
+        #     train_ds = train_ds.cache()
+
+        # train_data = self.get_dataset(self.train_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES)).shuffle(self.BUFFER_SIZE)
+        # test_data = self.get_dataset(self.test_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES))
+        return train_ds.prefetch(1), test_ds
+
+    def preprocess(self, ds):
+        ds = ds.map(process_path)
+        return ds
+
+    def split_dataset(self, ds):
+        # TODO split train into train and test datasets
+        pass
         # self.LABEL_COLUMN = self.params.layout["target"]
         # self.NUMERIC_FEATURES = self.params.layout["numeric"]
         # self.CATEGORICAL_FEATURES = self.params.layout["categorical"]
         # if not self.NUMERIC_FEATURES and not self.CATEGORICAL_FEATURES:
         #     self.NUMERIC_FEATURES =
         # self.SELECT_COLUMNS = [self.LABEL_COLUMN] + self.NUMERIC_FEATURES + self.CATEGORICAL_FEATURES
-        self.train_file_path = self.params.train_path
-        # self.test_file_path = self.params.train_path
-        # if not self.test_file_path:
-            # self.train_file_path, \
-
-    def build(self):
-        # if cache:
-        #     ds = ds.cache()
-        # train_data = self.get_dataset(self.train_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES)).shuffle(self.BUFFER_SIZE)
-        # test_data = self.get_dataset(self.test_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES))
-        train_data = self.get_dataset_from_files(self.train_file_path).repeat().batch(self.BATCH_SIZE).prefetch(1)
-        # test_data = self.get_dataset_from_files(self.test_file_path)
-
-        return train_data
-        # , test_data
-
-    def get_dataset(self, file_path, **kwargs):
-        dataset = tf.data.experimental.make_csv_dataset(
-            file_path,
-            batch_size=256,
-            select_columns=self.SELECT_COLUMNS,
-            label_name=self.LABEL_COLUMN,
-            na_value="?",
-            num_epochs=1,
-            ignore_errors=True,
-            **kwargs)
-        return dataset
-
-    def get_dataset_from_files(self, file_path):
-        dataset = tf.data.Dataset.list_files(str(file_path+'/*/*'))
-        dataset = dataset.map(process_path)
-        return dataset
-
-    def split_dataset(self, train_file_path):
-        # TODO split train into train and test datasets
-        pass
