@@ -18,7 +18,7 @@ class DataPipe:
 
         if self.params.test_path != "":
             test_ds = reader.read(self.params.test_path, mode="predict")
-            # test_ds = mapper.map(test_ds)
+            test_ds = mapper.map(test_ds, mode="predict")
         else:
             test_ds = None
             # train_ds, test_ds = self.split_dataset(train_ds)

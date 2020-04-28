@@ -12,17 +12,17 @@ def train(args):
     params = args.get_params()
     pipe = DataPipe(params)
     train_ds, test_ds = pipe.build()
-    x_batch = next(iter(test_ds))
-    print(x_batch.keys())
+    # x_batch, y_batch = next(iter(test_ds))
 
-    # model = Model(params)
+    model = Model(params)
     # model.build()
     # print(model(data).shape)
     # model.summary()
 
-    # model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
-    # history = model.fit(train_ds, epochs=1, steps_per_epoch=1000)
-    # predictions = model.predict(test_data)
+    model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError(), metrics=['mse'])
+    history = model.fit(train_ds, epochs=1, steps_per_epoch=100)
+    predictions = model.predict(test_ds, steps=100)
+    print (len(predictions))
 
     # Show some results
     # for prediction, actual in zip(predictions[:10], list(test_data)[0][1][:10]):

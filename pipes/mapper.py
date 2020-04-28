@@ -2,11 +2,16 @@ import tensorflow as tf
 from utils.preprocessing.image.image_utils import process_path
 from utils.preprocessing.structured.struct_utils import PackNumericFeatures
 
+def get_label(feature):
+    return feature, ""
+
 class DataMapper:
     def __init__(self, params):
         self.params = params
 
-    def map(self, ds):
+    def map(self, ds, mode="train"):
+        if mode == "predict":
+            ds = ds.map(get_label)
         if self.params.map_type == "image":
             ds = self.map_image(ds)
 
