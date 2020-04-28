@@ -8,7 +8,7 @@
         "categorical": ["spacegroup"]
         },
     "train_path": "/home/ravi/Desktop/programming/github/auto-ml/data/train.csv",
-    "test_path": "",
+    "test_path": "/home/ravi/Desktop/programming/github/auto-ml/data/test.csv",
     "data_type": "structured csv",
     "map_type": "structured",
     "buffer_size": 500,

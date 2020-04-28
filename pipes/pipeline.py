@@ -1,5 +1,3 @@
-import tensorflow as tf
-
 from utils.preprocessing.image.image_utils import process_path
 from .reader import DataReader
 from .mapper import DataMapper
@@ -19,7 +17,8 @@ class DataPipe:
         train_ds = train_ds.shuffle(self.params.buffer_size)
 
         if self.params.test_path != "":
-            test_ds = reader.read(self.params.test_path).batch(self.params.batch_size)
+            test_ds = reader.read(self.params.test_path, mode="predict")
+            # test_ds = mapper.map(test_ds)
         else:
             test_ds = None
             # train_ds, test_ds = self.split_dataset(train_ds)
@@ -27,8 +26,6 @@ class DataPipe:
         # if self.CACHE:
         #     train_ds = train_ds.cache()
 
-        # train_data = self.get_dataset(self.train_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES)).shuffle(self.BUFFER_SIZE)
-        # test_data = self.get_dataset(self.test_file_path).map(PackNumericFeatures(self.NUMERIC_FEATURES))
         return train_ds.prefetch(1), test_ds
 
     def preprocess(self, ds):
@@ -38,7 +35,3 @@ class DataPipe:
     def split_dataset(self, ds):
         # TODO split train into train and test datasets
         pass
-        # self.LABEL_COLUMN = self.params.layout["target"]
-        # self.NUMERIC_FEATURES = self.params.layout["numeric"]
-        # self.CATEGORICAL_FEATURES = self.params.layout["categorical"]
-        # self.SELECT_COLUMNS = [self.LABEL_COLUMN] + self.NUMERIC_FEATURES + self.CATEGORICAL_FEATURES
